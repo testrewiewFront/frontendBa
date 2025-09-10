@@ -100,7 +100,7 @@ const Nav = ({ setIsNavExpanded }: NavProps) => {
                 onMouseLeave={() => setIsNavOpen(false)}
             >
                 <div className="flex justify-center items-center py-[1.488vw] ls:py-[3.918vw] overflow-hidden">
-                    <img src={Logo} alt="Logo" className="transition-all duration-300 w-[3vw] group-hover:w-[10.294vw] group-hover:ls:w-[13.294vw]" />
+                    <img src={Logo} alt="Logo" className="transition-all duration-300 w-[3vw] group-hover:w-[7.294vw] group-hover:ls:w-[13.294vw]" />
                 </div>
                 
                 <div className="w-full h-[0.059vw] ls:h-[0.158vw] bg-white"></div>

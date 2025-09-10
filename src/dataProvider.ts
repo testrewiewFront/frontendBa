@@ -1,7 +1,7 @@
 import jsonServerProvider from 'ra-data-json-server';
 import { fetchUtils } from 'react-admin';
 
-const apiUrl = 'http://localhost:5000/api';
+const apiUrl = 'https://backendba-oqfl.onrender.com/api';
 
 const httpClient = (url: string, options: any = {}) => {
     if (!options.headers) {
@@ -30,10 +30,10 @@ const transformImageUrls = (data: any): any => {
         
         // Transform image URLs to include full server path
         if (transformed.image && transformed.image.startsWith('/uploads/')) {
-            transformed.image = `http://localhost:5000${transformed.image}`;
+            transformed.image = `https://backendba-oqfl.onrender.com${transformed.image}`;
         }
         if (transformed.img && transformed.img.startsWith('/uploads/')) {
-            transformed.img = `http://localhost:5000${transformed.img}`;
+            transformed.img = `https://backendba-oqfl.onrender.com${transformed.img}`;
         }
         
         return transformed;

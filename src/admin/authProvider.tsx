@@ -3,7 +3,7 @@ import axios from 'axios';
 const adminAuthProvider = {
     login: async ({ email, password }: { email: string, password: string }) => {
         try {
-            const response = await axios.post('http://localhost:5000/api/admins/login', { email, password });
+            const response = await axios.post('https://backendba-oqfl.onrender.com/api/admins/login', { email, password });
 
             const { token, admin } = response.data;
             const { role, id } = admin; 

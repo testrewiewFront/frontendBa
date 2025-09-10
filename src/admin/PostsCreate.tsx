@@ -31,7 +31,7 @@ const PostsCreate = () => {
     useEffect(() => {
         const fetchStatusChoices = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/status/public');
+                const response = await axios.get('https://backendba-oqfl.onrender.com/api/status/public');
                 setStatusChoices(response.data);
             } catch (error) {
                 console.error('Error fetching status choices:', error);
@@ -45,7 +45,7 @@ const PostsCreate = () => {
     useEffect(() => {
         const fetchPaymentSystemChoices = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/cryptodetails/public');
+                const response = await axios.get('https://backendba-oqfl.onrender.com/api/cryptodetails/public');
                 const cryptoChoices = response.data.map((crypto: any) => ({
                     id: crypto.label.toLowerCase(),
                     name: crypto.label

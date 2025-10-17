@@ -1,6 +1,6 @@
 import { Create, SimpleForm, TextInput, PasswordInput, SelectInput, ArrayInput, SimpleFormIterator, DateInput, NumberInput } from "react-admin";
 import { useGetIdentity } from "react-admin";
-import { Box, Typography, Card, Grid } from '@mui/material';
+import { Box, Typography, Card, Grid, useMediaQuery, useTheme } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -13,7 +13,9 @@ const emailValidation = (value: string) => {
 };
 
 const PostsCreate = () => {
-    const { identity, isLoading } = useGetIdentity(); 
+    const { identity, isLoading } = useGetIdentity();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md')); 
     const [statusChoices, setStatusChoices] = useState([]);
     const [paymentSystemChoices, setPaymentSystemChoices] = useState([
         { id: 'trc20', name: 'TRC20' },
@@ -67,21 +69,60 @@ const PostsCreate = () => {
     }, []); 
 
     return (
-        <Create transform={(data) => ({
-            ...data,
-            created_at: new Date().toISOString()
-        })}>
+        <Create transform={(data) => {
+            const transformedData = {
+                ...data,
+                created_at: new Date().toISOString(),
+                create_ad: identity?.id // Додаємо ID адміна який створює ліда
+            };
+            console.log('Creating user with admin ID:', identity?.id);
+            console.log('Transformed data:', transformedData);
+            return transformedData;
+        }}>
             <SimpleForm>
-                <Box sx={{ width: '100%', px: 2 }}>
-                    <Card sx={{ p: 3, mb: 3, borderRadius: 2, boxShadow: 3 }}>
+                <Box sx={{ 
+                    width: '100%', 
+                    px: isMobile ? 1 : 2,
+                    maxWidth: '100%',
+                    overflow: 'hidden'
+                }}>
+                    <Card sx={{ 
+                        p: isMobile ? 2 : 3, 
+                        mb: isMobile ? 2 : 3, 
+                        borderRadius: 2, 
+                        boxShadow: isMobile ? 2 : 3,
+                        mx: isMobile ? 0 : 'auto'
+                    }}>
                         <Typography 
-                            variant="h5" 
-                            sx={{ mb: 2, fontWeight: 'bold', background: 'linear-gradient(45deg, #2196F3, #21CBF3)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+                            variant={isMobile ? "h6" : "h5"} 
+                            sx={{ 
+                                mb: 2, 
+                                fontWeight: 'bold', 
+                                background: 'linear-gradient(45deg, #2196F3, #21CBF3)', 
+                                WebkitBackgroundClip: 'text', 
+                                WebkitTextFillColor: 'transparent',
+                                fontSize: isMobile ? '1.1rem' : '1.5rem'
+                            }}
                         >
-                            Дані користувача
+                            Данные пользователя
+                        </Typography>
+                        <Typography 
+                            variant="body2" 
+                            sx={{ 
+                                mb: 2, 
+                                color: '#666',
+                                fontStyle: 'italic'
+                            }}
+                        >
+                            Создает: {identity?.email || identity?.name || 'Текущий админ'} (ID: {identity?.id})
                         </Typography>
                         <TextInput source="email" required validate={emailValidation} fullWidth />
-                        <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+                        <Box sx={{ 
+                            display: 'flex', 
+                            flexDirection: isMobile ? 'column' : 'row',
+                            gap: isMobile ? 1 : 2, 
+                            mt: 2 
+                        }}>
                             <TextInput source="name" fullWidth />
                             <TextInput source="lastName" fullWidth />
                         </Box>
@@ -101,15 +142,39 @@ const PostsCreate = () => {
                         )}
                     </Card>
 
-                    <Card sx={{ p: 3, mb: 3, borderRadius: 2, boxShadow: 3 }}>
+                    <Card sx={{ 
+                        p: isMobile ? 2 : 3, 
+                        mb: isMobile ? 2 : 3, 
+                        borderRadius: 2, 
+                        boxShadow: isMobile ? 2 : 3 
+                    }}>
                         <Typography 
-                            variant="h5" 
-                            sx={{ mb: 2, fontWeight: 'bold', background: 'linear-gradient(45deg, #FF9800, #FF5722)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+                            variant={isMobile ? "h6" : "h5"} 
+                            sx={{ 
+                                mb: 2, 
+                                fontWeight: 'bold', 
+                                background: 'linear-gradient(45deg, #FF9800, #FF5722)', 
+                                WebkitBackgroundClip: 'text', 
+                                WebkitTextFillColor: 'transparent',
+                                fontSize: isMobile ? '1.1rem' : '1.5rem'
+                            }}
                         >
-                            Транзакції
+                            Транзакции
                         </Typography>
                         <ArrayInput label="" source="transactions">
-                            <SimpleFormIterator>
+                            <SimpleFormIterator
+                                sx={{
+                                    '& .RaSimpleFormIterator-form': {
+                                        display: 'grid',
+                                        gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(200px, 1fr))',
+                                        gap: isMobile ? 1 : 2,
+                                        padding: isMobile ? 1 : 2,
+                                        border: '1px solid #e0e0e0',
+                                        borderRadius: 2,
+                                        marginBottom: 2
+                                    }
+                                }}
+                            >
                                 <DateInput source="date" fullWidth />
                                 <NumberInput source="sum" fullWidth />
                                 <TextInput source="country" fullWidth />
@@ -128,8 +193,8 @@ const PostsCreate = () => {
                                     source="type"
                                     label="Transaction Type"
                                     choices={[
-                                        { id: 'deposit', name: 'Deposit (Поповнення)' },
-                                        { id: 'withdrawal', name: 'Withdrawal (Зняття)' }
+                                        { id: 'deposit', name: 'Deposit (Пополнение)' },
+                                        { id: 'withdrawal', name: 'Withdrawal (Снятие)' }
                                     ]}
                                     defaultValue="deposit"
                                     fullWidth
@@ -138,22 +203,39 @@ const PostsCreate = () => {
                         </ArrayInput>
                     </Card>
 
-                    <Card sx={{ p: 3, borderRadius: 2, boxShadow: 3 }}>
+                    <Card sx={{ 
+                        p: isMobile ? 2 : 3, 
+                        borderRadius: 2, 
+                        boxShadow: isMobile ? 2 : 3 
+                    }}>
                         <Typography 
-                            variant="h5" 
-                            sx={{ mb: 2, fontWeight: 'bold', background: 'linear-gradient(45deg, #9C27B0, #E91E63)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+                            variant={isMobile ? "h6" : "h5"} 
+                            sx={{ 
+                                mb: 2, 
+                                fontWeight: 'bold', 
+                                background: 'linear-gradient(45deg, #9C27B0, #E91E63)', 
+                                WebkitBackgroundClip: 'text', 
+                                WebkitTextFillColor: 'transparent',
+                                fontSize: isMobile ? '1.1rem' : '1.5rem'
+                            }}
                         >
-                            Деталі EUR
+                            Детали EUR
                         </Typography>
-                        <Grid container spacing={3}>
+                        <Grid container spacing={isMobile ? 2 : 3}>
                             <Grid item xs={12} sm={6}>
-                                <TextInput source="detailsEUR.label" label="Label" fullWidth />
+                                <TextInput source="detailsEUR.label" label="Метка" fullWidth />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <TextInput source="detailsEUR.nuberDetails" label="Number Details" fullWidth />
+                                <TextInput source="detailsEUR.nuberDetails" label="Номер деталей" fullWidth />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextInput source="detailsEUR.description" label="Description" fullWidth multiline rows={3} />
+                                <TextInput 
+                                    source="detailsEUR.description" 
+                                    label="Описание" 
+                                    fullWidth 
+                                    multiline 
+                                    rows={isMobile ? 2 : 3} 
+                                />
                             </Grid>
                         </Grid>
                     </Card>

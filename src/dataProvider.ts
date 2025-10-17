@@ -47,6 +47,44 @@ const dataProvider = {
     ...baseDataProvider,
     
     getList: (resource: string, params: any) => {
+        // Кастомна обробка пошуку для users (клієнтів)
+        if (resource === 'users' && params.filter?.q) {
+            const searchQuery = params.filter.q.toLowerCase();
+            // Видаляємо 'q' з фільтрів
+            const { q, ...otherFilters } = params.filter;
+            
+            // Спочатку отримуємо всі записи з іншими фільтрами
+            const customParams = {
+                ...params,
+                filter: otherFilters,
+                pagination: { page: 1, perPage: 1000 } // Отримуємо більше записів для фільтрації
+            };
+            
+            return baseDataProvider.getList(resource, customParams).then(response => {
+                // Фільтруємо дані на клієнті по імені та прізвищу
+                const filteredData = response.data.filter((item: any) => {
+                    const fullName = `${item.name || ''} ${item.lastName || ''}`.toLowerCase();
+                    const name = (item.name || '').toLowerCase();
+                    const lastName = (item.lastName || '').toLowerCase();
+                    
+                    return fullName.includes(searchQuery) || 
+                           name.includes(searchQuery) || 
+                           lastName.includes(searchQuery);
+                });
+                
+                // Застосовуємо пагінацію до відфільтрованих даних
+                const { page, perPage } = params.pagination;
+                const start = (page - 1) * perPage;
+                const end = start + perPage;
+                const paginatedData = filteredData.slice(start, end);
+                
+                return {
+                    data: transformImageUrls(paginatedData),
+                    total: filteredData.length
+                };
+            });
+        }
+        
         return baseDataProvider.getList(resource, params).then(response => ({
             ...response,
             data: transformImageUrls(response.data)

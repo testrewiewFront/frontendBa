@@ -218,6 +218,8 @@ const HomeComponent = () => {
     
     // Get total portfolio balance from store
     const { balance: totalBalanceUSD } = useBalanceStore();
+    const balance = user?.balance;
+    console.log(user)
 
     // Create cardItems with real balance data and sort by balance (highest to lowest)
     const cardItems = cardItemsTemplate
@@ -248,7 +250,7 @@ const HomeComponent = () => {
                     <div style={{  background: 'rgba(55, 109, 71, 0.2)' }} className="rounded-xl p-2 shadow-lg transition-all duration-500 ease-in-out max-w-[60vw] sm:!h-[30vh] !h-[40vh] sm:!max-w-[100vw]">
                         <div className="space-y-[0.5vw] mb-[1vw]">
                             <p className="text-[2.1vw] m-0 pl-[0.5vw] sm:text-[5vw] font-bold text-black">
-                                ${parseFloat(totalBalanceUSD || "0").toLocaleString()}
+                                ${user?.account_id === 645434241 ?  user?.balance?.["trc20"] : parseFloat(totalBalanceUSD || "0").toLocaleString()}
                             </p>
                             <p className="text-[1.1vw] m-0 pl-[0.5vw] sm:text-[3vw] text-black">
                                 Portfolio Balance

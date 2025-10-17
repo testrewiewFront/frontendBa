@@ -184,30 +184,57 @@ const RGBAColorPickerInput = ({ source, label, validate }: { source: string; lab
     );
 };
 
-const CryptodetailsEdit = () => (
-    <Edit>
-        <SimpleForm>
-            <TextInput source="label" validate={required()} />
-            <TextInput source="network" validate={required()} />
-            <TextInput source="address" validate={required()} />
-            <ColorPickerInput source="color" label="Color" validate={required()} />
-            <RGBAColorPickerInput source="bg" label="Background Color" validate={required()} />
-            <ImageWithDeleteButton />
-            <FileInput 
-                source="image" 
-                label="Update Image" 
-                accept={{ 'image/*': [] }} 
-                multiple={false}
-                sx={{
-                    '& .RaFileInputPreview-removeButton': {
-                        display: 'none'
-                    }
-                }}
-            >
-                <FileField source="src" title="title" />
-            </FileInput>
-        </SimpleForm>
-    </Edit>
-);
+const CryptodetailsEdit = () => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+    return (
+        <Edit>
+            <SimpleForm>
+                <Box sx={{ 
+                    width: '100%', 
+                    maxWidth: isMobile ? '100%' : '800px',
+                    mx: 'auto',
+                    p: isMobile ? 1 : 2
+                }}>
+                    <TextInput 
+                        source="label" 
+                        validate={required()} 
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
+                    <TextInput 
+                        source="network" 
+                        validate={required()} 
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
+                    <TextInput 
+                        source="address" 
+                        validate={required()} 
+                        fullWidth
+                        sx={{ mb: 2 }}
+                    />
+                    <ColorPickerInput source="color" label="Color" validate={required()} />
+                    <RGBAColorPickerInput source="bg" label="Background Color" validate={required()} />
+                    <ImageWithDeleteButton />
+                    <FileInput 
+                        source="image" 
+                        label="Update Image" 
+                        accept={{ 'image/*': [] }} 
+                        multiple={false}
+                        sx={{
+                            '& .RaFileInputPreview-removeButton': {
+                                display: 'none'
+                            }
+                        }}
+                    >
+                        <FileField source="src" title="title" />
+                    </FileInput>
+                </Box>
+            </SimpleForm>
+        </Edit>
+    );
+};
 
 export default CryptodetailsEdit;

@@ -218,7 +218,6 @@ const HomeComponent = () => {
     
     // Get total portfolio balance from store
     const { balance: totalBalanceUSD } = useBalanceStore();
-    const balance = user?.balance;
     console.log(user)
 
     // Create cardItems with real balance data and sort by balance (highest to lowest)

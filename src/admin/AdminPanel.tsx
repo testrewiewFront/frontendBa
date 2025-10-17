@@ -297,54 +297,7 @@ const AdminPanel = () => {
     });
 
     // Додаємо глобальні стилі для кращого контролю
-    const globalStyles = {
-        '& .RaLayout-content': {
-            padding: isMobile ? '8px !important' : isTablet ? '12px !important' : '16px !important',
-            maxWidth: '100% !important',
-            overflow: 'hidden !important',
-        },
-        '& .RaList-main': {
-            maxWidth: '100% !important',
-            overflow: 'hidden !important',
-        },
-        '& .MuiTableContainer-root': {
-            maxWidth: `calc(100vw - ${isMobile ? '160px' : isTablet ? '180px' : '200px'}) !important`,
-            width: '100% !important',
-            overflow: 'auto !important',
-            tableLayout: 'fixed !important',
-            '& table': {
-                width: '100% !important',
-                tableLayout: 'fixed !important',
-                minWidth: 'auto !important',
-            },
-        },
-        '& .MuiTable-root': {
-            width: '100% !important',
-            tableLayout: 'fixed !important',
-            minWidth: 'auto !important',
-        },
-        // Додаткові стилі для React Admin
-        '& .RaDatagrid-root': {
-            '& .RaDatagrid-table': {
-                minWidth: 'auto !important',
-            },
-        },
-        '& .RaList-content': {
-            overflow: 'hidden !important',
-        },
-        // Приховуємо деякі колонки на мобільних
-        ...(isMobile && {
-            '& .column-lastName, & .column-account_id, & .column-created_at': {
-                display: 'none !important',
-            },
-        }),
-        // Приховуємо деякі колонки на планшетах
-        ...(isTablet && !isMobile && {
-            '& .column-created_at': {
-                display: 'none !important',
-            },
-        }),
-    };
+   
 
     return (
         <ThemeProvider theme={responsiveTheme}>

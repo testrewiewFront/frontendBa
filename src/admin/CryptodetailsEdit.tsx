@@ -1,5 +1,5 @@
 import { Edit, SimpleForm, TextInput, FileInput, FileField, ImageField, required, useRecordContext, useInput } from 'react-admin';
-import { Box, Button, Typography, TextField, Slider } from '@mui/material';
+import { Box, Button, Typography, TextField, Slider, useMediaQuery } from '@mui/material';
 import { Delete as DeleteIcon } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
 
@@ -185,8 +185,8 @@ const RGBAColorPickerInput = ({ source, label, validate }: { source: string; lab
 };
 
 const CryptodetailsEdit = () => {
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    
+    const isMobile = useMediaQuery("(max-width:768px)");
 
     return (
         <Edit>

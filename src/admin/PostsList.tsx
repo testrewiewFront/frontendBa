@@ -1,6 +1,24 @@
-import { useGetIdentity, List, Datagrid, TextField, BooleanField, EditButton, DeleteButton, Filter, SearchInput, SimpleList } from "react-admin";
+import { useGetIdentity, List, Datagrid, TextField, BooleanField, EditButton, DeleteButton, Filter, SearchInput, SimpleList, FunctionField } from "react-admin";
 import { Box, useMediaQuery, useTheme, Chip, Stack, Typography } from "@mui/material";
 import { Person, Badge, Block, AccountBox } from "@mui/icons-material";
+
+// Функція для форматування дати у формат dd.mm.yyyy
+const formatDate = (dateString: string) => {
+    if (!dateString) return '-';
+    
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return '-';
+        
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        
+        return `${day}.${month}.${year}`;
+    } catch (error) {
+        return '-';
+    }
+};
 
 const ClientsFilter = (props: any) => {
     return (
@@ -31,27 +49,34 @@ const CustomDatagrid = () => {
                 primaryText={(record: any) => `${record.name} ${record.lastName}`}
                 secondaryText={(record: any) => record.email}
                 tertiaryText={(record: any) => (
-                    <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-                        <Chip 
-                            icon={<Badge />} 
-                            label={record.role} 
-                            size="small" 
-                            color="primary"
-                        />
-                        {record.blocked && (
+                    <Stack direction="column" spacing={1} sx={{ mt: 1 }}>
+                        <Stack direction="row" spacing={1} flexWrap="wrap">
                             <Chip 
-                                icon={<Block />} 
-                                label="Blocked" 
+                                icon={<Badge />} 
+                                label={record.role} 
                                 size="small" 
-                                color="error"
+                                color="primary"
                             />
+                            {record.blocked && (
+                                <Chip 
+                                    icon={<Block />} 
+                                    label="Blocked" 
+                                    size="small" 
+                                    color="error"
+                                />
+                            )}
+                            <Chip 
+                                icon={<AccountBox />} 
+                                label={`ID: ${record.account_id}`} 
+                                size="small" 
+                                variant="outlined"
+                            />
+                        </Stack>
+                        {record.lastLogin && (
+                            <Typography variant="caption" color="text.secondary">
+                                Останній вхід: {formatDate(record.lastLogin)}
+                            </Typography>
                         )}
-                        <Chip 
-                            icon={<AccountBox />} 
-                            label={`ID: ${record.account_id}`} 
-                            size="small" 
-                            variant="outlined"
-                        />
                     </Stack>
                 )}
                 leftAvatar={() => <Person />}
@@ -170,6 +195,12 @@ const CustomDatagrid = () => {
             <TextField source="name" label="Name" sx={{ width: '100%' }} />
             {!isMobile && <TextField source="lastName" label="Last Name" sx={{ width: '100%' }} />}
             <TextField source="role" sx={{ width: '100%' }} />
+            <FunctionField 
+                source="lastLogin" 
+                label="Last Login"
+                render={(record: any) => formatDate(record.lastLogin)}
+                sx={{ width: '100%' }} 
+            />
             <BooleanField source="blocked" label="Blocked" sx={{ width: '100%' }} />
             {!isMobile && <TextField source="account_id" sx={{ width: '100%' }} />}
             <EditButton />

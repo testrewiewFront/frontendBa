@@ -132,6 +132,15 @@ const formatMarketCap = (marketCap: number): string => {
 };
 
 const getAssetPrice = (marketData: MarketData[], assetLabel: string, assetTitle: string): number => {
+    // For USD, return fixed price
+    if (assetLabel === 'usd' || assetTitle === 'USD') return 1;
+    
+    // For EUR, try to find eurc in market data, fallback to 1.1
+    if (assetLabel === 'eur' || assetTitle === 'EUR') {
+        const eurCoin = marketData.find(coin => coin.symbol.toLowerCase() === 'eurc');
+        return eurCoin?.current_price || 1.1;
+    }
+    
     const coin = marketData.find(coin =>
         coin.symbol.toLowerCase() === assetLabel.toLowerCase() ||
         coin.symbol.toLowerCase() === assetTitle.toLowerCase()
@@ -220,13 +229,30 @@ const HomeComponent = () => {
     const { balance: totalBalanceUSD } = useBalanceStore();
     console.log(user)
 
-    // Create cardItems with real balance data and sort by balance (highest to lowest)
+    // Create cardItems with real balance data and sort by balance
+    // Non-zero balances (positive or negative) come first, sorted from highest to lowest
+    // Zero balances come last
     const cardItems = cardItemsTemplate
         .map(item => ({
             ...item,
             balance: user?.balance?.[item.lable as keyof typeof user.balance]?.toString() || "0.00"
         }))
-        .sort((a, b) => parseFloat(b.balance) - parseFloat(a.balance));
+        .sort((a, b) => {
+            const balanceA = parseFloat(a.balance);
+            const balanceB = parseFloat(b.balance);
+            
+            // If both are zero, maintain order
+            if (balanceA === 0 && balanceB === 0) return 0;
+            
+            // If A is zero, B comes first
+            if (balanceA === 0) return 1;
+            
+            // If B is zero, A comes first
+            if (balanceB === 0) return -1;
+            
+            // Both are non-zero, sort from highest to lowest
+            return balanceB - balanceA;
+        });
 
     return (
         <div className="py-[2.105vw] sm:pt-[2.105vw] sm:pb-[23.105vw] sm:px-[9.111vw] px-[4.211vw] space-y-[1.2vw] sm:space-y-0 ">
@@ -430,7 +456,20 @@ const HomeComponent = () => {
                                             <p className="text-[1.8vw] sm:text-[4.5vw] font-bold text-gray-800">{item.title}</p>
                                         </div>
                                         <p className="text-[1.4vw] sm:text-[3.5vw] text-gray-500">
-                                            ${(parseFloat(item.balance) * getAssetPrice(marketData, item.lable, item.title)).toLocaleString()}
+                                            {(() => {
+                                                const price = getAssetPrice(marketData, item.lable, item.title);
+                                                const balance = parseFloat(item.balance);
+                                                
+                                                // If price is not loaded yet, show loading or $0
+                                                if (price === 0 || isNaN(price)) return '$0';
+                                                
+                                                const usdValue = balance * price;
+                                                
+                                                if (usdValue === 0 || isNaN(usdValue)) return '$0';
+                                                return usdValue < 0 
+                                                    ? `-$${Math.abs(usdValue).toLocaleString()}` 
+                                                    : `$${usdValue.toLocaleString()}`;
+                                            })()}
                                         </p>
                                     </div>
                                     <span onClick={() => navigate(`/payment`)} className="text-[0.996vw] sm:text-[2.8vw] underline mt-[1.1vw] text-end text-gray-500 cursor-pointer">View Address</span>

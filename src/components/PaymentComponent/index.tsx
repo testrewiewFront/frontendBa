@@ -611,7 +611,21 @@ const PaymentComponent = () => {
                                                         <p className={`text-[1.2vw] sm:text-[3.2vw] font-bold mb-[0.2vw] sm:mb-[0.5vw] ${
                                                             isDeposit ? 'text-green-600' : 'text-red-600'
                                                         }`}>
-                                                            {isDeposit ? '+' : '-'}${displayAmount.toLocaleString()}
+                                                            {(() => {
+                                                                const currencySymbols: Record<string, string> = {
+                                                                    'eur': '€',
+                                                                    'usd': '$',
+                                                                    'btc': '₿',
+                                                                    'eth': 'Ξ',
+                                                                    'usdt': '$',
+                                                                    'trc20': '$',
+                                                                    'usdt-d': '$',
+                                                                    'dash': 'Đ'
+                                                                };
+                                                                const ps = transaction.ps?.toLowerCase() || 'usd';
+                                                                const symbol = currencySymbols[ps] || '$';
+                                                                return `${isDeposit ? '+' : '-'}${symbol}${displayAmount.toLocaleString()}`;
+                                                            })()}
                                                         </p>
                                                        
                                                     </div>

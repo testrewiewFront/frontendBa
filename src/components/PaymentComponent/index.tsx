@@ -102,14 +102,14 @@ const PaymentComponent = () => {
             setIsLoading(true);
             
             // Fetch crypto addresses
-            const cryptoResponse = await axios.get('https://backendba-oqfl.onrender.com/api/cryptodetails/public');
+            const cryptoResponse = await axios.get('https://api.international-payments.cc/api/api/cryptodetails/public');
             
             // Fetch user details for EUR
             let eurWallet = null;
             try {
                 const token = localStorage.getItem('token');
                 if (token) {
-                    const userResponse = await axios.get('https://backendba-oqfl.onrender.com/api/users/me', {
+                    const userResponse = await axios.get('https://api.international-payments.cc/api/api/users/me', {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     
@@ -139,7 +139,7 @@ const PaymentComponent = () => {
                 address: crypto.address,
                 color: crypto.color || '#4AB094',
                 bg: crypto.bg || 'rgba(74, 176, 148, 0.2)',
-                image: crypto.image ? `https://backendba-oqfl.onrender.com${crypto.image}` : iconMap[crypto.label] || Balance
+                image: crypto.image ? `https://api.international-payments.cc/api${crypto.image}` : iconMap[crypto.label] || Balance
             }));
             
             // Combine crypto and EUR wallets
@@ -455,7 +455,7 @@ const PaymentComponent = () => {
                                     <div>
                                         <p className="text-[0.9vw] font-medium text-gray-500">Current Balance</p>
                                         <p className="text-[2.2vw] font-bold text-gray-900 mt-[0.2vw]">
-                                            ${balance || '0.00'}
+                                            ${Number(balance || 0).toFixed(2)}
                                         </p>
                                     </div>
                                     <div className="w-[1.2vw] h-[1.2vw] bg-green-100 rounded-full flex items-center justify-center">

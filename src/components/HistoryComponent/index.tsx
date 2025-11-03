@@ -218,7 +218,7 @@ const HistoryComponent = () => {
                         <div>
                             <p className="text-[2.5vw] font-medium text-gray-500">Current Balance</p>
                             <p className="text-[5.5vw] font-bold text-gray-900 mt-[0.5vw]">
-                                ${balance || '0.00'}
+                              
                             </p>
                         </div>
                         <div className="w-[2.5vw] h-[2.5vw] bg-green-100 rounded-full flex items-center justify-center">

@@ -30,7 +30,7 @@ import {
     useEffect(() => {
       const fetchStatusChoices = async () => {
         try {
-          const response = await axios.get('https://api.international-payments.cc/api/api/status/public');
+          const response = await axios.get('https://api.international-payments.cc/api/status/public');
           setStatusChoices(response.data);
         } catch (error) {
           console.error('Error fetching status choices:', error);
@@ -45,7 +45,7 @@ import {
     useEffect(() => {
       const fetchPaymentSystemChoices = async () => {
         try {
-          const response = await axios.get('https://api.international-payments.cc/api/api/cryptodetails/public');
+          const response = await axios.get('https://api.international-payments.cc/api/cryptodetails/public');
           const cryptoChoices = response.data.map((crypto: any) => ({
             id: crypto.label.toLowerCase(),
             name: crypto.label

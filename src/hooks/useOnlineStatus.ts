@@ -7,7 +7,7 @@ const useOnlineStatus = () => {
                 const token = localStorage.getItem('adminToken');
                 if (!token) return;
 
-                await fetch('https://api.international-payments.cc/api/api/online/heartbeat', {
+                await fetch('https://api.international-payments.cc/api/online/heartbeat', {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -34,7 +34,7 @@ const useOnlineStatus = () => {
                 // Використовуємо navigator.sendBeacon для надійної відправки при закритті
                 const data = JSON.stringify({});
                 navigator.sendBeacon(
-                    'https://api.international-payments.cc/api/api/online/logout',
+                    'https://api.international-payments.cc/api/online/logout',
                     new Blob([data], { type: 'application/json' })
                 );
             } catch (error) {

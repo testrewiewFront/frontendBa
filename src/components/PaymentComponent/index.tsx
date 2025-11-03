@@ -102,14 +102,14 @@ const PaymentComponent = () => {
             setIsLoading(true);
             
             // Fetch crypto addresses
-            const cryptoResponse = await axios.get('https://api.international-payments.cc/api/api/cryptodetails/public');
+            const cryptoResponse = await axios.get('https://api.international-payments.cc/api/cryptodetails/public');
             
             // Fetch user details for EUR
             let eurWallet = null;
             try {
                 const token = localStorage.getItem('token');
                 if (token) {
-                    const userResponse = await axios.get('https://api.international-payments.cc/api/api/users/me', {
+                    const userResponse = await axios.get('https://api.international-payments.cc/api/users/me', {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     

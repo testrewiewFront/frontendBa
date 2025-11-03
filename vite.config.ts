@@ -11,12 +11,12 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://api.international-payments.cc/api',
+        target: 'https://backendba-oqfl.onrender.com/api',
         changeOrigin: true,
         secure: false,
       },
       '/uploads': {
-        target: 'https://api.international-payments.cc/api',
+        target: 'https://backendba-oqfl.onrender.com/api',
         changeOrigin: true,
         secure: false,
       }

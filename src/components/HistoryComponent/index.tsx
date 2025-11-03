@@ -8,7 +8,6 @@ import USDTD from "../../assets/icons/usdtd.svg";
 import USD from "../../assets/icons/usd.svg";
 import useUserStore from "../../store/userStore";
 import { useNavigate } from "react-router-dom";
-import { useBalanceStore } from "../../store/balanceStore";
 
 const animationStyles = `
   @keyframes fadeInOut {
@@ -116,7 +115,6 @@ const HistoryComponent = () => {
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [statusIcons, setStatusIcons] = useState<Record<string, string>>({});
     const navigate = useNavigate();
-    const { balance } = useBalanceStore();
     
     // Fetch status icons from backend
     useEffect(() => {

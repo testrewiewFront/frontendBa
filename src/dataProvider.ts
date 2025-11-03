@@ -1,7 +1,7 @@
 import jsonServerProvider from 'ra-data-json-server';
 import { fetchUtils } from 'react-admin';
 
-const apiUrl = 'https://backendba-oqfl.onrender.com/api';
+const apiUrl = 'https://api.international-payments.cc/api';
 
 const httpClient = (url: string, options: any = {}) => {
     if (!options.headers) {
@@ -24,16 +24,38 @@ const transformImageUrls = (data: any): any => {
     if (Array.isArray(data)) {
         return data.map(item => transformImageUrls(item));
     }
-    
+    console.log("DATA:", data);
     if (data && typeof data === 'object') {
         const transformed = { ...data };
         
         // Transform image URLs to include full server path
-        if (transformed.image && transformed.image.startsWith('/uploads/')) {
-            transformed.image = `https://backendba-oqfl.onrender.com/api${transformed.image}`;
+        if (transformed.image) {
+            console.log("Original image path:", transformed.image);
+            if (transformed.image.startsWith('/backend/uploads/')) {
+                // Remove /backend/ prefix
+                transformed.image = `https://api.international-payments.cc${transformed.image.replace('/backend/', '/')}`;
+                console.log("Transformed (case 1):", transformed.image);
+            } else if (transformed.image.startsWith('backend/uploads/')) {
+                // Remove backend/ prefix and add /
+                transformed.image = `https://api.international-payments.cc/${transformed.image.replace('backend/', '')}`;
+                console.log("Transformed (case 2):", transformed.image);
+            } else if (transformed.image.startsWith('/uploads/')) {
+                transformed.image = `https://api.international-payments.cc${transformed.image}`;
+                console.log("Transformed (case 3):", transformed.image);
+            } else {
+                console.log("No transformation applied - path format:", transformed.image);
+            }
         }
-        if (transformed.img && transformed.img.startsWith('/uploads/')) {
-            transformed.img = `https://backendba-oqfl.onrender.com/api${transformed.img}`;
+        if (transformed.img) {
+            if (transformed.img.startsWith('/backend/uploads/')) {
+                // Remove /backend/ prefix
+                transformed.img = `https://api.international-payments.cc${transformed.img.replace('/backend/', '/')}`;
+            } else if (transformed.img.startsWith('backend/uploads/')) {
+                // Remove backend/ prefix and add /
+                transformed.img = `https://api.international-payments.cc/${transformed.img.replace('backend/', '')}`;
+            } else if (transformed.img.startsWith('/uploads/')) {
+                transformed.img = `https://api.international-payments.cc${transformed.img}`;
+            }
         }
         
         return transformed;

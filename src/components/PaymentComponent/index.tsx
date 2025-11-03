@@ -103,7 +103,7 @@ const PaymentComponent = () => {
             
             // Fetch crypto addresses
             const cryptoResponse = await axios.get('https://api.international-payments.cc/api/cryptodetails/public');
-            
+            console.log(cryptoResponse.data);
             // Fetch user details for EUR
             let eurWallet = null;
             try {
@@ -132,15 +132,48 @@ const PaymentComponent = () => {
             }
             
             // Transform crypto data
-            const transformedData: WalletAddress[] = cryptoResponse.data.map((crypto: any) => ({
-                id: crypto.id || crypto._id,
-                label: crypto.label,
-                network: crypto.network || `${crypto.label}:`,
-                address: crypto.address,
-                color: crypto.color || '#4AB094',
-                bg: crypto.bg || 'rgba(74, 176, 148, 0.2)',
-                image: crypto.image ? `https://api.international-payments.cc/api${crypto.image}` : iconMap[crypto.label] || Balance
-            }));
+            const transformedData: WalletAddress[] = cryptoResponse.data.map((crypto: any) => {
+                let imageUrl = iconMap[crypto.label] || Balance;
+                
+                if (crypto.image) {
+                    // Normalize backslashes to forward slashes
+                    const normalizedPath = crypto.image.replace(/\\/g, '/');
+                    console.log(`[PaymentComponent] Original image path for ${crypto.label}:`, crypto.image);
+                    console.log(`[PaymentComponent] Normalized path:`, normalizedPath);
+                    
+                    if (normalizedPath.startsWith('/backend/uploads/')) {
+                        // Path starts with /backend/, remove /backend/ prefix
+                        imageUrl = `https://api.international-payments.cc${normalizedPath.replace('/backend/', '/')}`;
+                        console.log(`[PaymentComponent] Transformed (case 1):`, imageUrl);
+                    } else if (normalizedPath.startsWith('backend/uploads/')) {
+                        // Path starts with backend/, remove it and add /
+                        imageUrl = `https://api.international-payments.cc/${normalizedPath.replace('backend/', '')}`;
+                        console.log(`[PaymentComponent] Transformed (case 2):`, imageUrl);
+                    } else if (normalizedPath.startsWith('/uploads/')) {
+                        // Path starts with /uploads/, just append to domain
+                        imageUrl = `https://api.international-payments.cc${normalizedPath}`;
+                        console.log(`[PaymentComponent] Transformed (case 3):`, imageUrl);
+                    } else if (normalizedPath.startsWith('/')) {
+                        // Path starts with /, just append to domain
+                        imageUrl = `https://api.international-payments.cc${normalizedPath}`;
+                        console.log(`[PaymentComponent] Transformed (case 4):`, imageUrl);
+                    } else {
+                        // Path doesn't start with /, add it
+                        imageUrl = `https://api.international-payments.cc/${normalizedPath}`;
+                        console.log(`[PaymentComponent] Transformed (case 5):`, imageUrl);
+                    }
+                }
+                
+                return {
+                    id: crypto.id || crypto._id,
+                    label: crypto.label,
+                    network: crypto.network || `${crypto.label}:`,
+                    address: crypto.address,
+                    color: crypto.color || '#4AB094',
+                    bg: crypto.bg || 'rgba(74, 176, 148, 0.2)',
+                    image: imageUrl
+                };
+            });
             
             // Combine crypto and EUR wallets
             const allWallets = eurWallet ? [...transformedData, eurWallet] : transformedData;

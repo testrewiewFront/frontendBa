@@ -102,14 +102,14 @@ const PaymentComponent = () => {
             setIsLoading(true);
             
             // Fetch crypto addresses
-            const cryptoResponse = await axios.get('https://backendba-oqfl.onrender.com/api/api/cryptodetails/public');
+            const cryptoResponse = await axios.get('https://backendba-oqfl.onrender.com/api/cryptodetails/public');
             
             // Fetch user details for EUR
             let eurWallet = null;
             try {
                 const token = localStorage.getItem('token');
                 if (token) {
-                    const userResponse = await axios.get('https://backendba-oqfl.onrender.com/api/api/users/me', {
+                    const userResponse = await axios.get('https://backendba-oqfl.onrender.com/api/users/me', {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     
@@ -139,7 +139,7 @@ const PaymentComponent = () => {
                 address: crypto.address,
                 color: crypto.color || '#4AB094',
                 bg: crypto.bg || 'rgba(74, 176, 148, 0.2)',
-                image: crypto.image ? `https://backendba-oqfl.onrender.com/api/api${crypto.image}` : iconMap[crypto.label] || Balance
+                image: crypto.image ? `https://backendba-oqfl.onrender.com/api${crypto.image}` : iconMap[crypto.label] || Balance
             }));
             
             // Combine crypto and EUR wallets

@@ -27,9 +27,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               page: 1,
               sparkline: false,
               price_change_percentage: '1h,24h,7d,30d'
+            },
+            headers: {
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache',
+              'Expires': '0'
             }
           }
         );
+        console.log('✅ Layout: Market data loaded, calculating balance...');
         setMarketData(response.data);
       } catch (error) {
         console.error('Error fetching market data:', error);
@@ -44,6 +50,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   // Calculate and set balance whenever user data or market data changes
   useEffect(() => {
     if (user?.balance && marketData.length > 0) {
+      console.log('💰 Calculating balance for user:', user.account_id);
+      console.log('📊 User balances:', user.balance);
+      console.log('📈 Market data available:', marketData.length, 'coins');
+      
       const totalBalanceUSD = Object.entries(user.balance).reduce((acc: number, [currency, amount]: [string, any]) => {
         const balance = parseFloat(amount || "0");
         if (balance === 0) return acc;
@@ -63,13 +73,19 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           priceInUSD = coin?.current_price || 0;
         }
         
+        console.log(`  ${currency}: ${balance} × $${priceInUSD} = $${balance * priceInUSD}`);
+        
         return acc + (balance * priceInUSD);
       }, 0);
       
+      console.log('💵 Total Balance USD:', totalBalanceUSD);
       setBalance(totalBalanceUSD.toString());
     } else if (user?.balance) {
       // If no market data yet, set balance to 0 temporarily
+      console.log('⚠️ Market data not loaded yet, setting balance to 0');
       setBalance('0');
+    } else {
+      console.log('⚠️ User balance not available');
     }
   }, [user?.balance, marketData, setBalance]);
 
@@ -87,12 +103,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         },
       })
       .then((response) => {
-        console.log('User data:', response.data);
+        console.log('✅ User data loaded:', response.data);
+        console.log('👤 Account ID:', response.data.account_id);
+        console.log('💳 User balance object:', response.data.balance);
         setUser(response.data);
-        console.log(response.data)
       })
       .catch((error) => {
-        console.error('Error fetching user data:', error);
+        console.error('❌ Error fetching user data:', error);
+        console.error('Error details:', error.response?.data || error.message);
         setUser(null);
       }).finally(() => {
         setLoader(false);

@@ -197,9 +197,15 @@ const HomeComponent = () => {
                             page: 1,
                             sparkline: false,
                             price_change_percentage: '1h,24h,7d,30d'
+                        },
+                        headers: {
+                            'Cache-Control': 'no-cache, no-store, must-revalidate',
+                            'Pragma': 'no-cache',
+                            'Expires': '0'
                         }
                     }
                 );
+                console.log('✅ Market data fetched successfully:', response.data);
                 setMarketData(response.data);
             } catch (error: any) {
                 setError(error.response?.data?.error || 'Failed to fetch market data');

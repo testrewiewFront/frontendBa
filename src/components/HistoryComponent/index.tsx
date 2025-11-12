@@ -317,7 +317,7 @@ const HistoryComponent = () => {
                                                     <div className={`sm:text-[2.5vw] text-[1vw] flex items-center justify-center font-bold ${
                                                         isDeposit ? 'text-green-600' : 'text-red-600'
                                                     }`}>
-                                                        {isDeposit ? '+' : '-'}${displayAmount.toLocaleString()}
+                                                        {isDeposit ? '+' : '-'}{displayAmount.toLocaleString()}
                                                     </div>
                                                     <div className="sm:text-[2.5vw] text-[1vw] flex items-center justify-center">{item.country || "-"}</div>
                                                     <div className="sm:text-[2.5vw] flex items-center justify-center">

@@ -467,7 +467,7 @@ const HistoryComponent = () => {
                                                             <div className={`text-[5vw] font-bold ${
                                                                 isDeposit ? 'text-green-600' : 'text-red-600'
                                                             }`}>
-                                                                {isDeposit ? '+' : '-'}${displayAmount.toLocaleString()}
+                                                                {isDeposit ? '+' : '-'}{displayAmount.toLocaleString()}
                                                             </div>
                                                         </div>
                                                     </div>

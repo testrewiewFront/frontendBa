@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Wallet from "../../assets/icons/wallet.svg"
 import WalletPlus from "../../assets/icons/wallet-plus.svg"
 import Transfer from "../../assets/icons/receipt.svg"
-import Exchange from "../../assets/icons/exchange.svg"
+import Profile from  "../../assets/icons/profile-user.svg"
 import History from "../../assets/icons/history.svg"
 import ExchangeModal from "../Modals/exchange-modal";
 
@@ -24,8 +24,9 @@ const navItem = [
         href: "/transfer"
     },
     {
-        title: "Exchange",
-        img: Exchange,
+        title: "Profile",
+        img: Profile ,
+        href : "/profile"
     },
     {
         title: "History",

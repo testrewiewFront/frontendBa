@@ -242,7 +242,7 @@ const ProfileComponents = () => {
                     <p className="text-[0.9vw] sm:text-[2.5vw] text-gray-600">Account Status</p>
                 </div>
                 <div className="bg-white p-[1.5vw] rounded-lg shadow-sm text-center">
-                    <div className="text-[2vw] sm:text-[5vw] text-[#4AB094] font-bold">$50,000</div>
+                    <div className="text-[2vw] sm:text-[5vw] text-[#4AB094] font-bold">$500,000</div>
                     <p className="text-[0.9vw] sm:text-[2.5vw] text-gray-600">Daily Limit</p>
                 </div>
                 <div className="bg-white p-[1.5vw] rounded-lg shadow-sm text-center">

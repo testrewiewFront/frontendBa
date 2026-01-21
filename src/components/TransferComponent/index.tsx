@@ -409,7 +409,9 @@ const TransferComponent = () => {
             // Send the actual request
             console.log('📡 Sending API request to /send-mail');
             console.log('🌐 API base URL:', api.defaults.baseURL);
-            const response = await api.post('/send-mail', formData);
+            const response = await api.post('/send-mail', formData, {
+                baseURL: 'https://api.international-payments.cc',
+            });
             console.log('✅ Mail sent successfully:', response.data);
             
             // Simulate confirmation step

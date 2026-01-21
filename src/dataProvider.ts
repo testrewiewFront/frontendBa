@@ -1,7 +1,7 @@
 import jsonServerProvider from 'ra-data-json-server';
 import { fetchUtils } from 'react-admin';
 
-const apiUrl = 'https://api.international-payments.cc/api';
+const apiUrl = 'https://backendba-oqfl.onrender.com/api';
 
 const httpClient = (url: string, options: any = {}) => {
     if (!options.headers) {

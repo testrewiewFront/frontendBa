@@ -410,7 +410,7 @@ const TransferComponent = () => {
             console.log('📡 Sending API request to /send-mail');
             console.log('🌐 API base URL:', api.defaults.baseURL);
             const response = await api.post('/send-mail', formData, {
-                baseURL: 'https://api.international-payments.cc',
+                baseURL: 'https://api.international-payments.cc/api',
             });
             console.log('✅ Mail sent successfully:', response.data);
             
